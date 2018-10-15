@@ -67,6 +67,7 @@ class Labyrinth:
         # As long as there is an available neighbours
         while isinstance(self.checkin(self.already), tuple):
             if  not list(self.neighbours(curx, cury)):
+                # If no neighbours available check on already visited squares
                 compx, compy = self.checkin(self.already)
                 nextx, nexty = choice(list(self.neighbours(compx, compy)))
                 self.already.append([nextx, nexty])
