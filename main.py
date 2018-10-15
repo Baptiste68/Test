@@ -104,7 +104,7 @@ def place_obj(objects, objectstaken):
     for obj in objectstaken:
         obj.placeobj(WGRD, WWALLV + 5, HWALLH)
 
-def place_guard():
+def place_guard(state):
     """
         Function that create and place the guard
     """
@@ -120,7 +120,13 @@ def place_guard():
     guard = pygame.image.load("images/Gardien.png")
     guard = pygame.transform.scale(guard, (WWALLV, HWALLH))
 
-    WINDOW.blit(guard, (xmax + 5, (WIDTH - 1) * WGRD + HWALLH / 2))
+    guardasleep = pygame.image.load("images/GuardASL.png")
+    guardasleep = pygame.transform.scale(guardasleep, (WWALLV, HWALLH))
+
+    if state == 1:
+        WINDOW.blit(guard, (xmax + 5, (WIDTH - 1) * WGRD + HWALLH / 2))
+    else:
+        WINDOW.blit(guardasleep, (xmax + 5, (WIDTH - 1) * WGRD + HWALLH / 2))
 
     return xmax
 
@@ -149,7 +155,8 @@ def mc_gyver_ini():
     """
         Initiate McGyver
     """
-    mc_gyver_img = pygame.transform.scale(pygame.image.load("images/MacGyver.png"), (WWALLV, HWALLH))
+    mc_gyver_img = pygame.transform.scale(pygame.image.load("images/MacGyver.png"),\
+    (WWALLV, HWALLH))
     # Coordinates of McGyver
     ymc = 0 + HWALLH / 2
     # Creation and placement of McGyver
@@ -177,7 +184,7 @@ def main():
     objects, objectstaken = object_ini()
 
     # Guard
-    xmax = place_guard()
+    xmax = place_guard(1)
 
     # Mac Gyver
     mc_gyver, ymc, ngyver = mc_gyver_ini()
@@ -242,7 +249,10 @@ def main():
             LABYRINTH.draw_lab()
             xtake = mctookobj(xtake, objects, xmc, ymc, objectstaken)
             place_obj(objects, objectstaken)
-            place_guard()
+            if canpass(objectstaken):
+                place_guard(0)
+            else:
+                place_guard(1)
             mc_gyver.changepos(xmc, ymc)
             mc_gyver.placemc()
             pygame.display.update()
@@ -250,7 +260,7 @@ def main():
 
     if continuing == 2:
         load_final(continuing)
-    
+
     if continuing == 3:
         load_final(continuing)
 
